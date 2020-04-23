@@ -1,20 +1,25 @@
 <template>
   <div id="app">
-  <app-header></app-header>
-    <router-view/>
-  <app-footer></app-footer>
+    <app-header :categories="categories"></app-header>
+    <router-view :categories="categories" />
+    <app-footer :categories="categories"></app-footer>
   </div>
 </template>
 
 <script>
-import Header from '@/components/Header.vue';
-import Footer from '@/components/Footer.vue'
+import Header from "@/components/Header.vue";
+import Footer from "@/components/Footer.vue";
+import {CategoriesMixin} from './mixins/Categories.js'
 export default {
   components: {
-    'app-header': Header,
-    'app-footer': Footer
+    "app-header": Header,
+    "app-footer": Footer
+  },
+  mixins: [CategoriesMixin],
+  created() {
+    this.getCategories();
   }
-}
+};
 </script>
 
 <style>
