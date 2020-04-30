@@ -9,45 +9,48 @@
       <div class="container" style="margin-left: 0px; margin-right: 0px">
         <div class="row">
           <div class="col-md-4"  >
-            <TopSellers></TopSellers>
+            <Products key="top-seller" :title="title='Top Seller'" :products="topSellersProducts"></Products>
           </div>
           <div class="col-md-4">
             <RecentlyViewed></RecentlyViewed>
           </div>
           <div class="col-md-4">
-            <TopNew></TopNew>
+            <Products key="top-new" :title="title='Top New'" :products="topNewProducts"></Products>
           </div>
         </div>
       </div>
     </div>
-
-    <HelloWorld msg="Welcome to Your Vue.js App" />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from "@/components/Home/HelloWorld.vue";
 import Carousel from "@/components/Home/Carousel.vue";
 import PromoArea from "@/components/Home/PromoArea.vue";
 import BrandsArea from "@/components/Home/BrandsArea.vue";
-import TopSellers from "@/components/Home/TopSellers.vue";
 import RecentlyViewed from "@/components/Home/RecentlyViewed.vue";
-import TopNew from "@/components/Home/TopNew.vue";
+import Products from "../components/Home/Products";
+
+import {mapGetters} from "vuex";
 
 export default {
   name: "Home",
   components: {
-    HelloWorld,
     Carousel,
     PromoArea,
     BrandsArea,
-    TopSellers,
     RecentlyViewed,
-    TopNew
+    Products
   },
   props:{
-    categories: []
+    categories: [Array]
+  },
+  computed: {
+    ...mapGetters(["topSellersProducts", "topNewProducts"])
+  },
+  created() {
+    this.$store.dispatch('getTopSellers');
+    this.$store.dispatch('getTopNew');
   }
 };
 </script>

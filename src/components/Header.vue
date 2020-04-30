@@ -5,7 +5,7 @@
         <div class="col-sm-3">
           <div class="logo" style="    width: 100px; height: 100px;">
             <h1>
-              <a href="index.html"><img src="../assets/img/logo.png"/></a>
+              <router-link to="/"><img src="../assets/img/logo.png"/></router-link>
             </h1>
           </div>
         </div>
@@ -19,11 +19,11 @@
         </div>
 
         <div class="col-sm-3">
-          <div class="shopping-item">
-            <a href="cart.html"
-              >Cart : <span class="cart-amunt">100.58 €</span>
+          <div class="shopping-item" @click="navigateToCart()">
+            <a href=""
+              >Cart : <span class="cart-amunt">{{cartTotal}} €</span>
               <i class="fa fa-shopping-cart"></i>
-              <span class="product-count">5</span></a
+              <span class="product-count">{{nbProducts}}</span></a
             >
           </div>
         </div>
@@ -46,9 +46,9 @@
                 >
               </li>
               <li
-                @click="navigateToShop(cat.productListId)"
+                @click="navigateToShop(cat.productListId, cat.name)"
                 v-for="cat in categories"
-                :key="cat.name"
+                :key="cat.id"
               >
                 <a href="">{{ cat.name }}</a>
               </li>
@@ -63,13 +63,42 @@
 <script>
 export default {
   props: {
-    categories: [Array]
+    categories: [Array],
+    cartTotal: [String],
+    nbProducts: [Number]
   },
-  methods: {
-    navigateToShop(id) {
-      this.$router.push("/shop/" + id);
+ /* data: function(){
+    return {
+      cartTotal: [String]
     }
-  }
+  },*/
+  methods: {
+    navigateToShop(shopId, shopName) {
+      this.$cookie.set('shopName', shopName);
+      this.$cookie.set('shopId', shopId);
+      this.$router.push("/shop/" + shopId);
+    },
+    navigateToCart(){
+      this.$router.push("/cart");
+    }
+  },
+  /*computed: {
+    cartTotal(){
+      if (this.$cookie.get('cartTotal')){
+        return this.$cookie.get('cartTotal');
+      } else {
+        return 0;
+      }
+    }
+  },
+ /* created() {
+      if (this.$cookie.get('cartTotal') === undefined){
+        this.cartTotal = 0;
+      } else {
+        this.cartTotal = this.$cookie.get('cartTotal');
+      }
+
+  }*/
 };
 </script>
 

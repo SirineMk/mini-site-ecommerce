@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <app-header :categories="categories"></app-header>
+    <app-header :nbProducts="nbProducts" :cartTotal="cartTotal" :categories="categories"></app-header>
     <router-view :categories="categories" />
     <app-footer :categories="categories"></app-footer>
   </div>
@@ -9,38 +9,38 @@
 <script>
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
-import {CategoriesMixin} from './mixins/Categories.js'
+import {mapGetters} from "vuex";
 export default {
   components: {
     "app-header": Header,
     "app-footer": Footer
   },
-  mixins: [CategoriesMixin],
+  data: function(){
+    return{
+      cartTotal: '',
+      nbProducts: 0
+    }
+  },
+  computed: {
+    ...mapGetters(["categories","cartDetails"])
+  },
   created() {
-    this.getCategories();
+    this.$store.dispatch('getCategories');
+    console.log(this.cartDetails);
+    if (document.cookie.indexOf('cartId') > -1) {
+      //cookie exists
+      this.$store.dispatch('getCart',this.$cookie.get('cartId'));
+      this.cartTotal =this.cartDetails.total;
+      this.nbProducts = this.cartDetails.items.length;
+      this.$cookie.set('cartTotal',this.cartDetails.total);
+    } else {
+      this.cartTotal = '0';
+      this.$cookie.set('cartId','xr7HaIK');
+
+    }
   }
 };
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
 </style>

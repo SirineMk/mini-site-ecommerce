@@ -22,7 +22,7 @@
           <div class="footer-menu">
             <h2 class="footer-wid-title">Categories</h2>
             <ul>
-              <li @click="navigateToShop(cat.productListId)" v-for = "cat in categories" :key="cat.name">
+              <li @click="navigateToShop(cat.productListId, cat.name)" v-for = "cat in categories" :key="cat.id">
                 <a href="">{{ cat.name }}</a>
               </li>
             </ul>
@@ -55,8 +55,10 @@
       categories: [Array]
     },
     methods: {
-      navigateToShop(id) {
-        this.$router.push('/shop/'+id);
+      navigateToShop(shopId, shopName) {
+        this.$cookie.set('shopName', shopName);
+        this.$cookie.set('shopId', shopId);
+        this.$router.push("/shop/" + shopId);
       }
     }
   };
